@@ -1,28 +1,26 @@
 package account.controllers;
 
-import account.models.UserData;
+import account.models.User;
 import account.models.UserDataResponseDto;
-import account.services.AccountService;
+import account.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController()
 @RequestMapping("/api/auth")
 public class AuthenticationController {
-    // todo 2 methods
 
     @Autowired
-    AccountService accountService;
+    UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDataResponseDto> signUpUser(@Valid @RequestBody UserData data) {
-        var dto = this.accountService.getUserSignUp(data);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<UserDataResponseDto> signUp(@Valid @RequestBody User user) {
+        var dto = this.userService.signUp(user);
         return ResponseEntity.ok(dto);
     }
 }
