@@ -1,6 +1,6 @@
 package account.security;
 
-import account.models.User;
+import account.models.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -50,3 +50,4 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 }
+

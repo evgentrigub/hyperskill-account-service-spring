@@ -1,6 +1,6 @@
 package account.controllers;
 
-import account.models.User;
+import account.models.entities.User;
 import account.models.UserDataResponseDto;
 import account.models.UserNewPasswordRequestDto;
 import account.models.UserNewPasswordResponseDto;

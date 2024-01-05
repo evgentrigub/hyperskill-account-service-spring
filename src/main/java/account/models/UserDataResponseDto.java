@@ -1,5 +1,6 @@
 package account.models;
 
+import account.models.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

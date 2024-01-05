@@ -1,9 +1,13 @@
-package account.models;
+package account.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.*;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Data
 @RequiredArgsConstructor

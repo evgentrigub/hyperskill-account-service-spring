@@ -12,3 +12,4 @@ public class UserNewPasswordResponseDto {
         this.status = "The password has been updated successfully";
     }
 }
+

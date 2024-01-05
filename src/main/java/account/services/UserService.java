@@ -1,6 +1,6 @@
 package account.services;
 
-import account.models.User;
+import account.models.entities.User;
 import account.models.UserDataResponseDto;
 import account.models.UserNewPasswordResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
