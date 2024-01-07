@@ -1,4 +1,4 @@
-package account.services;
+package account.repositories;
 
 import account.models.entities.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;

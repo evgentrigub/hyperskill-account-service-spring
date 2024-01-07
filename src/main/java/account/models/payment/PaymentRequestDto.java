@@ -1,6 +1,6 @@
-package account.models;
+package account.models.payment;
 
-import account.services.validators.ValidPeriodFormat;
+import account.security.validators.validPeriod.ValidPeriodFormat;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

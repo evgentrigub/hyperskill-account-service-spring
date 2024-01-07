@@ -1,4 +1,4 @@
-package account.models;
+package account.models.user;
 
 import lombok.Data;
 
@@ -12,4 +12,3 @@ public class UserNewPasswordResponseDto {
         this.status = "The password has been updated successfully";
     }
 }
-

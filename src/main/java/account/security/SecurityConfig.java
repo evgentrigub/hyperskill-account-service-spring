@@ -1,8 +1,9 @@
 package account.security;
 
+import account.exceptions.AccessDeniedHandlerImpl;
+import account.models.role.RoleType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,14 +35,22 @@ public class SecurityConfig {
                     auth.requestMatchers("/actuator/shutdown", "/error/**").permitAll();
                     auth.requestMatchers(toH2Console()).permitAll();
 
-                    auth.requestMatchers(HttpMethod.POST,
-                            "/api/acct/payments", "/api/auth/signup", "/api/auth/changepass/"
-                    ).permitAll();
-                    auth.requestMatchers(HttpMethod.PUT, "/api/acct/payments").permitAll();
-                    auth.anyRequest().authenticated();
+                    auth.requestMatchers("/api/auth/signup/**")
+                            .permitAll();
+                    auth.requestMatchers("/api/auth/changepass/**")
+                            .authenticated();
+                    auth.requestMatchers("/api/acct/**")
+                            .hasRole(RoleType.ACCOUNTANT.toString());
+                    auth.requestMatchers("/api/empl/**")
+                            .hasAnyRole(RoleType.ACCOUNTANT.toString(), RoleType.USER.toString());
+                    auth.requestMatchers("/api/admin/**")
+                            .hasRole(RoleType.ADMINISTRATOR.toString());
                 })
-                .httpBasic(Customizer.withDefaults())
                 .userDetailsService(userDetailsService)
+                .httpBasic(Customizer.withDefaults())
+                .exceptionHandling() // TODO deprecated
+                .accessDeniedHandler(new AccessDeniedHandlerImpl())
+                .and()
                 .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();

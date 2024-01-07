@@ -1,8 +1,9 @@
 package account.services;
 
-import account.models.PaymentHistoryResponseDto;
 import account.models.entities.Payment;
 import account.models.entities.User;
+import account.models.payment.PaymentHistoryResponseDto;
+import account.repositories.PaymentRepository;
 import account.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +15,12 @@ import java.util.List;
 
 @Service
 public class EmployeeService {
-    private final UserService userService;
-    private final PaymentRepository paymentRepository;
 
     @Autowired
-    public EmployeeService(UserService userService, PaymentRepository paymentRepository) {
-        this.userService = userService;
-        this.paymentRepository = paymentRepository;
-    }
+    UserService userService;
+
+    @Autowired
+    PaymentRepository paymentRepository;
 
     public ResponseEntity<?> getPayments(UserDetailsImpl userDetails, String period) {
         User employee = this.userService.getUser(userDetails.getUsername());

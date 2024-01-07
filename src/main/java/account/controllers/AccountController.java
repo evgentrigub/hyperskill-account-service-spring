@@ -1,7 +1,7 @@
 package account.controllers;
 
-import account.models.PaymentRequestDto;
-import account.models.PaymentsSavedResponseDto;
+import account.models.payment.PaymentRequestDto;
+import account.models.payment.PaymentsSavedResponseDto;
 import account.services.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package account.services.validators;
+package account.security.validators.role;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -6,11 +6,13 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = ValidPeriodFormatValidator.class)
+@Constraint(validatedBy = ValidRoleValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidPeriodFormat {
-    String message() default "Period is formatted incorrectly";
+public @interface ValidRole {
+    String message() default "Role not found!";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

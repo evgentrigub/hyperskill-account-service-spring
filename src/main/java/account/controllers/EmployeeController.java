@@ -1,8 +1,9 @@
 package account.controllers;
 
 import account.security.UserDetailsImpl;
+import account.security.validators.validPeriod.ValidPeriodFormat;
 import account.services.EmployeeService;
-import account.services.validators.ValidPeriodFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -15,11 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/empl")
 @Validated
 public class EmployeeController {
-    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
+    @Autowired
+    public EmployeeService employeeService;
 
     @GetMapping("/payment")
     public ResponseEntity<?> getPayments(@AuthenticationPrincipal UserDetailsImpl userDetails,

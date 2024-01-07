@@ -1,9 +1,9 @@
 package account.controllers;
 
 import account.models.entities.User;
-import account.models.UserDataResponseDto;
-import account.models.UserNewPasswordRequestDto;
-import account.models.UserNewPasswordResponseDto;
+import account.models.user.UserDataResponseDto;
+import account.models.user.UserNewPasswordRequestDto;
+import account.models.user.UserNewPasswordResponseDto;
 import account.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

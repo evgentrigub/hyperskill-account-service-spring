@@ -1,4 +1,4 @@
-package account.services;
+package account.repositories;
 
 import account.models.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +12,3 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsUserByEmailIgnoreCase(String email);
 
 }
-

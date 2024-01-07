@@ -1,9 +1,12 @@
 package account.services;
 
-import account.models.PaymentRequestDto;
-import account.models.PaymentsSavedResponseDto;
+import account.exceptions.UserNotFoundException;
 import account.models.entities.Payment;
 import account.models.entities.User;
+import account.models.payment.PaymentRequestDto;
+import account.models.payment.PaymentsSavedResponseDto;
+import account.repositories.PaymentRepository;
+import account.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,20 +19,15 @@ import java.util.List;
 
 @Service
 public class AccountService {
-    private final UserRepository userRepository;
-    private final PaymentRepository paymentRepository;
-    private final UserService userService;
 
     @Autowired
-    public AccountService(
-            UserRepository userRepository,
-            PaymentRepository paymentRepository,
-            UserService userService
-    ) {
-        this.userRepository = userRepository;
-        this.paymentRepository = paymentRepository;
-        this.userService = userService;
-    }
+    UserRepository userRepository;
+
+    @Autowired
+    PaymentRepository paymentRepository;
+
+    @Autowired
+    UserService userService;
 
     @Transactional
     public ResponseEntity<PaymentsSavedResponseDto> registerPayments(PaymentRequestDto[] request) {
@@ -37,7 +35,7 @@ public class AccountService {
 
         for (PaymentRequestDto paymentRequest : request) {
             if (!userRepository.existsUserByEmailIgnoreCase(paymentRequest.getEmployee())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!");
+                throw new UserNotFoundException();
             }
 
             if (paymentRepository.existsByEmployeeEmailAndPeriod(
@@ -61,7 +59,7 @@ public class AccountService {
     @Transactional
     public ResponseEntity<PaymentsSavedResponseDto> updatePayments(PaymentRequestDto request) {
         if (!userRepository.existsUserByEmailIgnoreCase(request.getEmployee())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!");
+            throw new UserNotFoundException();
         }
 
         if (!paymentRepository.existsByEmployeeEmailAndPeriod(request.getEmployee(), request.getPeriod())) {

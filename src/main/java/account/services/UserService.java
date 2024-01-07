@@ -1,8 +1,13 @@
 package account.services;
 
+import account.exceptions.UserNotFoundException;
+import account.models.entities.Role;
 import account.models.entities.User;
-import account.models.UserDataResponseDto;
-import account.models.UserNewPasswordResponseDto;
+import account.models.role.RoleType;
+import account.models.user.UserDataResponseDto;
+import account.models.user.UserNewPasswordResponseDto;
+import account.repositories.RoleRepository;
+import account.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,18 +21,18 @@ import java.util.Set;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     Set<String> breachedPasswords = Set.of("PasswordForJanuary", "PasswordForFebruary", "PasswordForMarch", "PasswordForApril",
             "PasswordForMay", "PasswordForJune", "PasswordForJuly", "PasswordForAugust",
             "PasswordForSeptember", "PasswordForOctober", "PasswordForNovember", "PasswordForDecember");
-
-    @Autowired
-    UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public UserDataResponseDto signUp(User userData) {
         boolean existed = userRepository.existsUserByEmailIgnoreCase(userData.getEmail());
@@ -35,12 +40,19 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User exist!");
         }
         isPasswordValid(userData.getPassword());
-
-        String encryptedPassword = passwordEncoder.encode(userData.getPassword());
+        
         userData.setEmail(userData.getEmail().toLowerCase());
+        String encryptedPassword = passwordEncoder.encode(userData.getPassword());
         userData.setPassword(encryptedPassword);
-        User savedUser = this.userRepository.save(userData);
-        return new UserDataResponseDto(savedUser);
+
+        Role role = new Role();
+        RoleType roleType = userRepository.count() == 0 ? RoleType.ADMINISTRATOR : RoleType.USER;
+        role.setRoleType(roleType);
+        userData.getRoles().add(role);
+
+        roleRepository.save(role);
+        userRepository.save(userData);
+        return new UserDataResponseDto(userData);
     }
 
     public Optional<User> getUserData(UserDetails userDetails) {
@@ -50,7 +62,7 @@ public class UserService {
     public User getUser(String email) {
         return userRepository
                 .findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public UserNewPasswordResponseDto getUserNewPassword(String userEmail, String newPass) {

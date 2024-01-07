@@ -1,4 +1,4 @@
-package account.models;
+package account.models.payment;
 
 import account.models.entities.Payment;
 import lombok.Data;
